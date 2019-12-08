@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SplashActivity">
+
+    <ImageView
+        android:id="@+id/splash_logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_garena"
+        android:layout_marginStart="100dp"
+        android:transitionName="app_logo"
+        android:layout_gravity="center_vertical"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="right|center_vertical"
+        android:text="Loading..."
+        tools:ignore="HardcodedText"
+        android:fontFamily="@font/rainbow_font"/>
+
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="200dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="right|center_vertical"
+        android:progressDrawable="@drawable/progress_background"
+        android:layout_height="8dp"/>
+
+</FrameLayout>
