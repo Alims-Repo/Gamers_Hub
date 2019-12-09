@@ -12,6 +12,7 @@ public class YoutubeDataModel implements Parcelable {
     private String description = "";
     private String publishedAt = "";
     private String thumbnail = "";
+    private String channel_thumbnail = "";
     private String video_id = "";
 
     public String getVideo_id() {
@@ -46,6 +47,14 @@ public class YoutubeDataModel implements Parcelable {
         this.publishedAt = publishedAt;
     }
 
+    public String getChannel_thumbnail() {
+        return channel_thumbnail;
+    }
+
+    public void setChannel_thumbnail(String thumbnail) {
+        this.channel_thumbnail = channel_thumbnail;
+    }
+
     public String getThumbnail() {
         return thumbnail;
     }
@@ -66,6 +75,7 @@ public class YoutubeDataModel implements Parcelable {
         dest.writeString(publishedAt);
         dest.writeString(thumbnail);
         dest.writeString(video_id);
+        dest.writeString(channel_thumbnail);
     }
 
     public YoutubeDataModel() {
@@ -84,6 +94,7 @@ public class YoutubeDataModel implements Parcelable {
         this.publishedAt = in.readString();
         this.thumbnail = in.readString();
         this.video_id = in.readString();
+        this.channel_thumbnail = in.readString();
 
     }
 

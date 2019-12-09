@@ -12,7 +12,17 @@ import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 import com.alim.freefire.gamershub.R;
 import com.alim.freefire.gamershub.interfaces.OnItemClickListener;
 import com.squareup.picasso.Picasso;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import java.util.ArrayList;
+
+import static com.alim.freefire.gamershub.Config.Config.CHANNEL_ID;
+import static com.alim.freefire.gamershub.Config.Config.CHANNEL_THUMB;
+import static com.alim.freefire.gamershub.Config.Config.CHANNEL_THUMB_KEY;
 
 public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolder> {
 
@@ -43,6 +53,7 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
         TextView textViewTitle = holder.textViewTitle;
         TextView textViewDes = holder.textViewDes;
         ImageView ImageThumb = holder.ImageThumb;
+        ImageView ChannelThumb = holder.ChannelThumb;
 
         YoutubeDataModel object = dataSet.get(position);
 
@@ -52,6 +63,7 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
 
         //TODO: image will be downloaded from url
         Picasso.with(mContext).load(object.getThumbnail()).into(ImageThumb);
+        Picasso.with(mContext).load("https://yt3.ggpht.com/a/AGF-l7_NdotdswYLM_QPKYq7fQUpl26kf5NiYI3tvQ=s88-c-k-c0xffffffff-no-rj-mo").into(ChannelThumb);
     }
 
     @Override
@@ -64,13 +76,14 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
         TextView textViewDes;
         TextView textViewDate;
         ImageView ImageThumb;
+        ImageView ChannelThumb;
 
         YoutubePostHolder(View itemView) {
             super(itemView);
             this.textViewTitle = itemView.findViewById(R.id.textViewTitle);
             this.textViewDes = itemView.findViewById(R.id.description);
             this.ImageThumb = itemView.findViewById(R.id.ImageThumb);
-
+            this.ChannelThumb = itemView.findViewById(R.id.channel_logo);
         }
 
         void bind(final YoutubeDataModel item, final OnItemClickListener listener) {

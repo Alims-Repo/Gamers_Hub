@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.alim.freefire.gamershub.Fragment.HomeFragment;
+import com.alim.freefire.gamershub.Fragment.HubFragment;
 import com.alim.freefire.gamershub.Fragment.LiveFragment;
 import com.alim.freefire.gamershub.Fragment.SettingsFragment;
 import com.alim.freefire.gamershub.Fragment.TrendingFragment;
@@ -22,7 +22,7 @@ public class PagerAdapter {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new HomeFragment();
+                    return new HubFragment();
                 case 1:
                     return new TrendingFragment();
                 case 2:
@@ -30,7 +30,7 @@ public class PagerAdapter {
                 case 3:
                     return new SettingsFragment();
             }
-            return new HomeFragment();
+            return new HubFragment();
         }
 
         @Override

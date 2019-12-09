@@ -29,10 +29,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.alim.freefire.gamershub.Config.Config.CHANNEL_THUMB;
+import static com.alim.freefire.gamershub.Config.Config.CHANNEL_THUMB_KEY;
 import static com.alim.freefire.gamershub.Config.Config.CHANNLE_GET_URL;
 
 
-public class HomeFragment extends Fragment {
+public class HubFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private HubAdapter adapter;
@@ -102,6 +104,8 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+
     public ArrayList<YoutubeDataModel> parseVideoListFromResponse(JSONObject jsonObject) {
         ArrayList<YoutubeDataModel> mList = new ArrayList<>();
         if (jsonObject.has("items")) {
@@ -124,14 +128,29 @@ public class HomeFragment extends Fragment {
                                 String description = jsonSnippet.getString("description");
                                 String publishedAt = jsonSnippet.getString("publishedAt");
                                 String thumbnail = jsonSnippet.getJSONObject("thumbnails").getJSONObject("high").getString("url");
+                                String ChannelID = jsonSnippet.getString("channelId");
+                                String channelThumb = "https://yt3.ggpht.com/a/AGF-l7_NdotdswYLM_QPKYq7fQUpl26kf5NiYI3tvQ=s88-c-k-c0xffffffff-no-rj-mo";
+
+                                try {
+                                    HttpClient httpClient = new DefaultHttpClient();
+                                    HttpGet httpGet = new HttpGet(CHANNEL_THUMB+ChannelID+CHANNEL_THUMB_KEY);
+                                    HttpResponse response = httpClient.execute(httpGet);
+                                    HttpEntity httpEntity = response.getEntity();
+                                    String json2 = EntityUtils.toString(httpEntity);
+                                    Toast.makeText(getActivity(), json2, Toast.LENGTH_LONG).show();
+                                    //channelThumb =
+                                } catch (Exception e) {
+
+                                    Toast.makeText(getActivity(), String.valueOf(e), Toast.LENGTH_LONG).show();
+                                }
 
                                 youtubeObject.setTitle(title);
                                 youtubeObject.setDescription(description);
                                 youtubeObject.setPublishedAt(publishedAt);
                                 youtubeObject.setThumbnail(thumbnail);
                                 youtubeObject.setVideo_id(video_id);
+                                youtubeObject.setChannel_thumbnail(channelThumb);
                                 mList.add(youtubeObject);
-
                             }
                         }
                     }
@@ -142,4 +161,6 @@ public class HomeFragment extends Fragment {
         }
         return mList;
     }
+
+
 }
