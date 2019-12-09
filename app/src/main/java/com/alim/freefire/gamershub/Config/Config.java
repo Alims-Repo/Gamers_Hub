@@ -5,7 +5,7 @@ public class Config {
     private Config() {
     }
 
-    public static final String API_KEY = "AIzaSyBEBZzlQACiOzr8K0NmA1ECqCvxvRkR52U";
+    public static final String API_KEY = "Write your api key here";
     public static final String CHANNEL_ID = "UC9nXCL3Cv-krVocODOZoxYg";
 
     public static final String CHANNLE_GET_URL = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=date&maxResults=50&key=" + API_KEY + "";
