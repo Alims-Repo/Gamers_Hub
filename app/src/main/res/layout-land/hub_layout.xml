@@ -11,9 +11,12 @@
         android:id="@+id/ImageThumb"
         android:layout_width="300dp"
         android:layout_height="160dp"
+        android:transitionName="thumb"
         android:src="@drawable/gradient_background"
         android:scaleType="centerCrop"
-        android:layout_marginBottom="10dp"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -21,23 +24,25 @@
         android:orientation="vertical"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/channel_logo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_garena"
-            android:layout_marginStart="10dp"/>
-
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-30dp"
+            android:layout_marginTop="10dp"
             android:textSize="20sp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:text="video Title"/>
+
+        <TextView
+            android:id="@+id/channel_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Channel Name"/>
 
         <TextView
             android:id="@+id/description"
@@ -45,7 +50,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_marginTop="10dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:text="Description goes here"/>

@@ -25,10 +25,10 @@
         android:layout_gravity="bottom"
         android:gravity="center"
         android:textSize="32sp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorAccent2"
         android:textStyle="bold"
         android:fontFamily="@font/rainbow_font"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="110dp"
         android:text="Loading..."
         tools:ignore="HardcodedText" />
 
@@ -40,7 +40,7 @@
         android:layout_marginEnd="100dp"
         android:progressDrawable="@drawable/progress_background"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="100dp"
-        android:layout_height="8dp" />
+        android:layout_marginBottom="95dp"
+        android:layout_height="6dp" />
 
 </FrameLayout>

@@ -1,8 +1,11 @@
 package com.alim.freefire.gamershub.interfaces;
 
+import android.widget.ImageView;
+
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 
 public interface OnItemClickListener {
-    void onItemClick(YoutubeDataModel item);
+    void onItemClick(YoutubeDataModel item, ImageView ImageThumb);
 
+    void load();
 }

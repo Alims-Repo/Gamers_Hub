@@ -3,20 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     tools:context=".MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="53dp">
+        android:layout_height="55dp"
+        android:background="?attr/Back">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_garena"
             android:transitionName="app_logo"
-            android:layout_marginStart="15dp"/>
+
+            android:layout_marginStart="15dp"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/main_title"
@@ -26,9 +30,9 @@
             android:fontFamily="@font/rainbow_font"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:textSize="42sp"
+            android:textSize="40sp"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="90dp"
+            android:layout_marginStart="85dp"
             android:gravity="center_vertical"/>
 
     </FrameLayout>
@@ -36,14 +40,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="53dp"
+        android:layout_marginTop="55dp"
         android:background="@drawable/gradient_background"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="57dp"
         android:layout_marginBottom="55dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -51,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="?attr/Back"
         app:menu="@menu/nav_menu"/>
 
 </FrameLayout>

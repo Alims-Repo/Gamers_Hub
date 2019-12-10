@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="selected_nav_bar_icon" format="color" />
+    <attr name="unselected_nav_bar_icon" format="color" />
+    <attr name="navigation_background" format="color" />
+    <attr name="BlackWhite" format="color" />
+    <attr name="WhiteBlack" format="color"/>
+    <attr name="Gray" format="color" />
+    <attr name="Back" format="color" />
+</resources>

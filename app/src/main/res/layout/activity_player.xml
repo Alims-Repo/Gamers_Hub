@@ -16,68 +16,54 @@
     <!--android:tag="image_tag" />-->
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_player"
+        android:minHeight="200dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
         android:id="@+id/title_layout"
         android:layout_below="@+id/youtube_player"
-        android:background="#e4e4e4"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textViewName"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="10dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:maxLines="2"
-            android:text="Android Name sjdnjas ajsk djak sjdka kaskdjaksdj kjskdjaksj"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20dp" />
+            android:text="Video Title"
+            android:textColor="?attr/BlackWhite"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
             android:maxLines="1"
-            android:text="Android Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksj"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="16dp" />
+            android:text="Date"
+            android:textSize="14sp" />
 
     </LinearLayout>
     <!--real image size is 40x50px-->
-    <ImageView
-        android:id="@+id/img_left_header"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:onClick="share_btn_pressed"
-        android:scaleType="fitCenter"
-        android:layout_below="@+id/youtube_player"
-        android:src="@drawable/ic_garena"
-        android:visibility="visible" />
 
     <TextView
         android:layout_below="@+id/title_layout"
         android:id="@+id/textViewDes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:layout_margin="10dp"
-        android:maxLines="4"
-        android:text="Android Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksjAndroid Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksjAndroid Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksjAndroid Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksjAndroid Name sjdnjas ajskdjaksjdka kaskdjaksdj kjskdjaksj"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="16dp" />
+        android:text="Description"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_below="@+id/textViewDes"
@@ -86,22 +72,14 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-
         android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FAVOURITE"
-            android:textColor="@color/colorAccent"/>
+        android:layout_height="match_parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="COMMENTS"
-            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
             android:layout_marginBottom="10dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -109,8 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
 </RelativeLayout>

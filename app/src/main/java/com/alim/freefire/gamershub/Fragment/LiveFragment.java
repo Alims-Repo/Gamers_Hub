@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.alim.freefire.gamershub.Adapter.HubAdapter;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.alim.freefire.gamershub.Config.Config.CHANNLE_GET_URL;
+import static com.alim.freefire.gamershub.Config.Config.LIVE_GET_URL;
 
 public class LiveFragment extends Fragment {
 
@@ -54,13 +56,17 @@ public class LiveFragment extends Fragment {
 
     private void initList(ArrayList<YoutubeDataModel> mListData) {
         Live.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new HubAdapter(getActivity(), mListData, new OnItemClickListener() {
+        adapter = new HubAdapter( mListData, new OnItemClickListener() {
             @Override
-            public void onItemClick(YoutubeDataModel item) {
-                YoutubeDataModel youtubeDataModel = item;
+            public void onItemClick(YoutubeDataModel item, ImageView ImageThumb) {
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                intent.putExtra(YoutubeDataModel.class.toString(), youtubeDataModel);
+                intent.putExtra(YoutubeDataModel.class.toString(), item);
                 startActivity(intent);
+            }
+
+            @Override
+            public void load() {
+
             }
         });
         Live.setAdapter(adapter);
@@ -75,7 +81,7 @@ public class LiveFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(CHANNLE_GET_URL);
+            HttpGet httpGet = new HttpGet(LIVE_GET_URL);
             try {
                 HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity httpEntity = response.getEntity();
@@ -102,7 +108,7 @@ public class LiveFragment extends Fragment {
         }
     }
 
-    public ArrayList<YoutubeDataModel> parseVideoListFromResponse(JSONObject jsonObject) {
+    private  ArrayList<YoutubeDataModel> parseVideoListFromResponse(JSONObject jsonObject) {
         ArrayList<YoutubeDataModel> mList = new ArrayList<>();
 
         if (jsonObject.has("items")) {

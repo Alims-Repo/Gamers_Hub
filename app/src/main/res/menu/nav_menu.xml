@@ -4,7 +4,7 @@
     <item
         android:id="@+id/home"
         android:title="Hub"
-        android:icon="@drawable/ic_garena"/>
+        android:icon="@drawable/gamers_hub"/>
 
     <item
         android:id="@+id/trending"

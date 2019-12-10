@@ -11,42 +11,40 @@
         android:id="@+id/ImageThumb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="thumb"
         android:src="@drawable/gradient_background"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
+        android:maxHeight="220dp"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
-
-        <ImageView
-            android:id="@+id/channel_logo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_garena"
-            android:layout_marginStart="10dp"/>
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?attr/BlackWhite"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:text="video Title"/>
 
         <TextView
-            android:id="@+id/description"
+            android:id="@+id/channel_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="video Title"/>
+            android:textSize="12sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Channel Name"/>
 
     </LinearLayout>
 

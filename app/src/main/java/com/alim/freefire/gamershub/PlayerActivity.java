@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alim.freefire.gamershub.Adapter.CommentAdapter;
+import com.alim.freefire.gamershub.DataBase.AppSettings;
 import com.alim.freefire.gamershub.Model.YoutubeCommentModel;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -42,6 +44,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+
+    AppSettings appSettings;
     private static final int READ_STORAGE_PERMISSION_REQUEST_CODE = 1;
     private static String GOOGLE_YOUTUBE_API = "AIzaSyBH8szUCt1ctKQabVeQuvWgowaKxHVjn8E";
     private YoutubeDataModel youtubeDataModel = null;
@@ -59,6 +63,21 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        appSettings = new AppSettings(this);
+        if (appSettings.getTheme()==1) {
+            setTheme(R.style.AppThemeDark);
+        } else if (appSettings.getTheme()==2) {
+            setTheme(R.style.AppTheme);
+        } else {
+            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    setTheme(R.style.AppThemeDark);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                    setTheme(R.style.AppTheme);
+                    break;
+            }
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         youtubeDataModel = getIntent().getParcelableExtra(YoutubeDataModel.class.toString());
@@ -120,6 +139,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         if (!wasRestored) {
             youTubePlayer.cueVideo(youtubeDataModel.getVideo_id());
         }
+        youTubePlayer.play();
         mYoutubePlayer = youTubePlayer;
     }
 
@@ -186,20 +206,6 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
     }
-
-    public void share_btn_pressed(View view) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        String link = ("https://www.youtube.com/watch?v=" + youtubeDataModel.getVideo_id());
-        // this is the text that will be shared
-        sendIntent.putExtra(Intent.EXTRA_TEXT, link);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, youtubeDataModel.getTitle()
-                + "Share");
-
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, "share"));
-    }
-
 
     private class RequestYoutubeCommentAPI extends AsyncTask<Void, String, String> {
 
