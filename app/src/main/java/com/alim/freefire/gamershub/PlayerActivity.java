@@ -13,14 +13,19 @@ import android.os.Environment;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alim.freefire.gamershub.Adapter.CommentAdapter;
 import com.alim.freefire.gamershub.DataBase.AppSettings;
 import com.alim.freefire.gamershub.Model.YoutubeCommentModel;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -116,6 +121,29 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
                 e.printStackTrace();
             }
         }
+
+        final ExpandableLinearLayout content = findViewById(R.id.content);
+        RelativeLayout header = findViewById(R.id.accordian_header);
+        final ImageView ExpandIcon = findViewById(R.id.expand_icon);
+
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {content.toggle();
+                if (content.isExpanded()) {
+                    ExpandIcon.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            textViewName.setMaxLines(2);
+                        }
+                    },200);
+                } else {
+                    textViewName.setMaxLines(10);
+                    ExpandIcon.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                }
+            }
+        });
+        ///
 
     }
 

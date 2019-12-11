@@ -5,7 +5,6 @@ import android.widget.ImageView;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 
 public interface OnItemClickListener {
-    void onItemClick(YoutubeDataModel item, ImageView ImageThumb);
-
     void load();
+    void onItemClick(YoutubeDataModel item);
 }

@@ -40,6 +40,12 @@
         <item name="android:navigationBarColor">@color/colorBlack</item>
     </style>
 
+    <style name="BottomNavigation.ActiveItemTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/rainbow_font</item>
+    </style>
+
     <style name="Chip_Style" parent="@style/Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/backgeound_chip_color</item>
         <item name="android:textColor">@color/text_chip_color</item>

@@ -58,7 +58,7 @@ public class LiveFragment extends Fragment {
         Live.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HubAdapter( mListData, new OnItemClickListener() {
             @Override
-            public void onItemClick(YoutubeDataModel item, ImageView ImageThumb) {
+            public void onItemClick(YoutubeDataModel item) {
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 intent.putExtra(YoutubeDataModel.class.toString(), item);
                 startActivity(intent);

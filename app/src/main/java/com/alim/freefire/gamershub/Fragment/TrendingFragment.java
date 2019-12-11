@@ -3,16 +3,23 @@ package com.alim.freefire.gamershub.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alim.freefire.gamershub.Adapter.HubAdapter;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
@@ -33,48 +40,76 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.alim.freefire.gamershub.Config.Config.CHANNLE_GET_URL;
+import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE;
+import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE2;
 import static com.alim.freefire.gamershub.Config.Config.TRENDING;
+import static com.alim.freefire.gamershub.Config.Config.TRENDING1;
+import static com.alim.freefire.gamershub.Config.Config.TRENDING2;
 
 public class TrendingFragment extends Fragment {
 
-    @SuppressLint("StaticFieldLeak")
-    private static Context context;
-    private static RecyclerView recyclerView;
-    private static ArrayList<YoutubeDataModel> mListData = new ArrayList<>();
+    private TextView load_text;
+    private HubAdapter adapter;
+    private ProgressBar loading_pro;
+    private static int position = 0;
+    private RecyclerView recyclerView;
+    private FrameLayout Loading_frame;
+    private boolean dataChanged = false;
+    private static String nextPageToken = "";
+    private LinearLayoutManager linearLayoutManager;
+    private ArrayList<YoutubeDataModel> mListData = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
 
-        context = getActivity();
         recyclerView = rootView.findViewById(R.id.recycle_view);
-        initList(mListData);
+        loading_pro = rootView.findViewById(R.id.loading_por);
+        Loading_frame = rootView.findViewById(R.id.loading);
+        load_text = rootView.findViewById(R.id.load_text);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        initList();
         new RequestYoutubeAPI().execute();
 
-        return rootView;
-    }
-
-    private static void initList(ArrayList<YoutubeDataModel> mListData) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        HubAdapter adapter = new HubAdapter( mListData, new OnItemClickListener() {
+        adapter = new HubAdapter(mListData, new OnItemClickListener() {
             @Override
-            public void onItemClick(YoutubeDataModel item, ImageView ImageThumb) {
-                Intent intent = new Intent(context, PlayerActivity.class);
+            public void onItemClick(YoutubeDataModel item) {
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 intent.putExtra(YoutubeDataModel.class.toString(), item);
-                context.startActivity(intent);
+                startActivity(intent);
             }
 
             @Override
             public void load() {
-
+                Loading_frame.setVisibility(View.VISIBLE);
+                dataChanged = true;
+                if (!nextPageToken.equals(""))
+                    new RequestYoutubeAPI().execute();
             }
         });
-        recyclerView.setAdapter(adapter);
+        LoadingColor();
+        loading_pro.setVisibility(View.VISIBLE);
+        return rootView;
+    }
+
+    private void initList() {
+        if (dataChanged) {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            adapter.notifyDataSetChanged();
+        } else {
+            linearLayoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setAdapter(adapter);
+            recyclerView.scrollToPosition(position);
+        }
+        if (mListData.size()>0)
+            loading_pro.setVisibility(View.GONE);
     }
 
     //create an asynctask to get all the data from youtube
-    private static class RequestYoutubeAPI extends AsyncTask<Void, String, String> {
+    @SuppressLint("StaticFieldLeak")
+    private class RequestYoutubeAPI extends AsyncTask<Void, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -83,8 +118,12 @@ public class TrendingFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             try {
+                String URL = TRENDING;
+                if (!nextPageToken.equals(""))
+                    URL = TRENDING1+nextPageToken+TRENDING2;
+                Log.println(Log.ASSERT,"ULR",URL);
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(TRENDING);
+                HttpGet httpGet = new HttpGet(URL);
                 HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity httpEntity = response.getEntity();
                 String json = EntityUtils.toString(httpEntity);
@@ -103,8 +142,9 @@ public class TrendingFragment extends Fragment {
             if (response != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    mListData = parseVideoListFromResponse(jsonObject);
-                    initList(mListData);
+                    mListData.addAll(parseVideoListFromResponse(jsonObject));
+                    Loading_frame.setVisibility(View.GONE);
+                    initList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -117,6 +157,10 @@ public class TrendingFragment extends Fragment {
         ArrayList<YoutubeDataModel> mList = new ArrayList<>();
         if (jsonObject.has("items")) {
             try {
+                if (jsonObject.has("nextPageToken")) {
+                    nextPageToken = jsonObject.getString("nextPageToken");
+                    Log.println(Log.ASSERT,"TOKEN",nextPageToken);
+                } else nextPageToken = "";
                 JSONArray jsonArray = jsonObject.getJSONArray("items");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject json = jsonArray.getJSONObject(i);
@@ -131,8 +175,11 @@ public class TrendingFragment extends Fragment {
 
                                 YoutubeDataModel youtubeObject = new YoutubeDataModel();
                                 JSONObject jsonSnippet = json.getJSONObject("snippet");
-                                String title = jsonSnippet.getString("title");
                                 String channel = jsonSnippet.getString("channelTitle");
+
+                                Log.println(Log.ASSERT,"Name",channel);
+
+                                String title = jsonSnippet.getString("title");
                                 String description = jsonSnippet.getString("description");
                                 String publishedAt = jsonSnippet.getString("publishedAt");
                                 String thumbnail = jsonSnippet.getJSONObject("thumbnails").getJSONObject("high").getString("url");
@@ -160,4 +207,26 @@ public class TrendingFragment extends Fragment {
         return mList;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        dataChanged = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        position = linearLayoutManager.getChildCount()+linearLayoutManager.findFirstVisibleItemPosition()-3;
+        dataChanged = false;
+    }
+
+    private void LoadingColor() {
+        TextPaint paint = load_text.getPaint();
+        float width = paint.measureText(load_text.getText().toString());
+        Shader textShader = new LinearGradient(0, 0, width, load_text.getTextSize(),
+                new int[]{getResources().getColor(R.color.colorGradusBlue)
+                        ,getResources().getColor(R.color.colorViolet)},
+                null, Shader.TileMode.CLAMP);
+        load_text.getPaint().setShader(textShader);
+    }
 }

@@ -2,22 +2,30 @@ package com.alim.freefire.gamershub.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.alim.freefire.gamershub.Adapter.HubAdapter;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 import com.alim.freefire.gamershub.PlayerActivity;
 import com.alim.freefire.gamershub.R;
 import com.alim.freefire.gamershub.interfaces.OnItemClickListener;
+import com.alim.freefire.gamershub.interfaces.OnNavClickListener;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,14 +41,20 @@ import java.util.Objects;
 import static com.alim.freefire.gamershub.Config.Config.CHANNLE_GET_URL;
 import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE;
 import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE2;
+import static com.alim.freefire.gamershub.Config.Config.SEARCH_URL;
+import static com.alim.freefire.gamershub.Config.Config.SEARCH_URL2;
 
 public class HubFragment extends Fragment {
 
-    int currentSize = 0;
-    boolean dataChanged = false;
-    static String nextPageToken = "";
+    private TextView load_text;
+    private HubAdapter adapter;
+    private ProgressBar loading_pro;
+    private static int position = 0;
     private RecyclerView recyclerView;
-    LinearLayoutManager linearLayoutManager;
+    private FrameLayout Loading_frame;
+    private boolean dataChanged = false;
+    private static String nextPageToken = "";
+    private LinearLayoutManager linearLayoutManager;
     private ArrayList<YoutubeDataModel> mListData = new ArrayList<>();
 
     @Override
@@ -49,20 +63,16 @@ public class HubFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_hub, container, false);
 
         recyclerView = rootView.findViewById(R.id.recycle_view);
-        initList(mListData);
+        loading_pro = rootView.findViewById(R.id.loading_por);
+        Loading_frame = rootView.findViewById(R.id.loading);
+        load_text = rootView.findViewById(R.id.load_text);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        initList();
         new RequestYoutubeAPI().execute();
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-
-        return rootView;
-    }
-
-    private void initList(final ArrayList<YoutubeDataModel> mListData) {
-        recyclerView.setLayoutManager(linearLayoutManager);
-        //HubAdapter adapter = new HubAdapter();
-        final HubAdapter adapter = new HubAdapter(mListData, new OnItemClickListener() {
+        adapter = new HubAdapter(mListData, new OnItemClickListener() {
             @Override
-            public void onItemClick(YoutubeDataModel item, ImageView ImageThumb) {
+            public void onItemClick(YoutubeDataModel item) {
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 intent.putExtra(YoutubeDataModel.class.toString(), item);
                 startActivity(intent);
@@ -70,22 +80,30 @@ public class HubFragment extends Fragment {
 
             @Override
             public void load() {
+                Loading_frame.setVisibility(View.VISIBLE);
                 dataChanged = true;
-                currentSize = mListData.size()-2;
-                new RequestYoutubeAPI().execute();
-                Toast.makeText(getActivity(), nextPageToken, Toast.LENGTH_SHORT).show();
+                if (!nextPageToken.equals(""))
+                    new RequestYoutubeAPI().execute();
             }
         });
+
+        LoadingColor();
+        loading_pro.setVisibility(View.VISIBLE);
+        return rootView;
+    }
+
+    private void initList() {
         if (dataChanged) {
+            recyclerView.setLayoutManager(linearLayoutManager);
             adapter.notifyDataSetChanged();
+        } else {
+            linearLayoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setAdapter(adapter);
-            Toast.makeText(getActivity(), "Changed.", Toast.LENGTH_SHORT).show();
-            dataChanged = false;
+            recyclerView.scrollToPosition(position);
         }
-        else {
-            Toast.makeText(getActivity(), "Else", Toast.LENGTH_SHORT).show();
-            recyclerView.setAdapter(adapter);
-        }
+        if (mListData.size()>0)
+            loading_pro.setVisibility(View.GONE);
     }
 
     //create an asynctask to get all the data from youtube
@@ -99,7 +117,7 @@ public class HubFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                String URL = CHANNLE_GET_URL;
+                String URL = SEARCH_URL+SEARCH_URL2;
                 if (!nextPageToken.isEmpty())
                     URL = NEXTPAGE+nextPageToken+NEXTPAGE2;
                 Log.println(Log.ASSERT,"ULR",URL);
@@ -124,7 +142,8 @@ public class HubFragment extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     mListData.addAll(parseVideoListFromResponse(jsonObject));
-                    initList(mListData);
+                    Loading_frame.setVisibility(View.GONE);
+                    initList();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -185,5 +204,28 @@ public class HubFragment extends Fragment {
             }
         }
         return mList;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dataChanged = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        position = linearLayoutManager.getChildCount()+linearLayoutManager.findFirstVisibleItemPosition()-3;
+        dataChanged = false;
+    }
+
+    private void LoadingColor() {
+        TextPaint paint = load_text.getPaint();
+        float width = paint.measureText(load_text.getText().toString());
+        Shader textShader = new LinearGradient(0, 0, width, load_text.getTextSize(),
+                new int[]{getResources().getColor(R.color.colorGradusBlue)
+                        ,getResources().getColor(R.color.colorViolet)},
+                null, Shader.TileMode.CLAMP);
+        load_text.getPaint().setShader(textShader);
     }
 }

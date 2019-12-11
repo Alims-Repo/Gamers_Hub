@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent, options.toBundle());
                 }
             }
-        },10);
+        },5);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (pause) {
-            //finish();
+            finish();
         }
     }
 }

@@ -41,7 +41,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.YoutubeC
         try {
             if (object.getThumbnail() != null) {
                 if (object.getThumbnail().startsWith("http")) {
-                    Picasso.with(mContext)
+                    Picasso.get()
                             .load(object.getThumbnail())
                             .into(imageView);
                 }

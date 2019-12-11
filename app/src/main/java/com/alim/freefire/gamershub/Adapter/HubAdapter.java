@@ -53,7 +53,8 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
         holder.bind(dataSet.get(position), listener);
 
         //TODO: image will be downloaded from url
-        Picasso.with(context).load(object.getThumbnail()).into(ImageThumb);
+        Picasso.get().load(object.getThumbnail()).into(ImageThumb);
+        //Picasso.with(context).load(object.getThumbnail()).into(ImageThumb);
         //Picasso.with(mContext).load(object2.getChannel_thumbnail()).into(ChannelThumb);
         if ((position >= getItemCount() - 1)) {
             listener.load();
@@ -65,7 +66,7 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
         return dataSet.size();
     }
 
-    static class YoutubePostHolder extends RecyclerView.ViewHolder {
+    class YoutubePostHolder extends RecyclerView.ViewHolder {
         TextView textViewTitle;
         TextView textViewDes;
         TextView textViewDate;
@@ -83,7 +84,7 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(item, ImageThumb);
+                    listener.onItemClick(item);
                 }
             });
         }
