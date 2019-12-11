@@ -6,6 +6,8 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +19,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.alim.freefire.gamershub.Adapter.HubAdapter;
 import com.alim.freefire.gamershub.Model.YoutubeDataModel;
 import com.alim.freefire.gamershub.PlayerActivity;
 import com.alim.freefire.gamershub.R;
 import com.alim.freefire.gamershub.interfaces.OnItemClickListener;
-import com.alim.freefire.gamershub.interfaces.OnNavClickListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -38,7 +38,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
-import static com.alim.freefire.gamershub.Config.Config.CHANNLE_GET_URL;
 import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE;
 import static com.alim.freefire.gamershub.Config.Config.NEXTPAGE2;
 import static com.alim.freefire.gamershub.Config.Config.SEARCH_URL;
@@ -46,6 +45,7 @@ import static com.alim.freefire.gamershub.Config.Config.SEARCH_URL2;
 
 public class HubFragment extends Fragment {
 
+    FloatingActionButton top;
     private TextView load_text;
     private HubAdapter adapter;
     private ProgressBar loading_pro;
@@ -66,9 +66,13 @@ public class HubFragment extends Fragment {
         loading_pro = rootView.findViewById(R.id.loading_por);
         Loading_frame = rootView.findViewById(R.id.loading);
         load_text = rootView.findViewById(R.id.load_text);
+        top = rootView.findViewById(R.id.go_top);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        initList();
-        new RequestYoutubeAPI().execute();
+
+        if (mListData.size()==0) {
+            initList();
+            new RequestYoutubeAPI().execute();
+        }
 
         adapter = new HubAdapter(mListData, new OnItemClickListener() {
             @Override
@@ -84,6 +88,24 @@ public class HubFragment extends Fragment {
                 dataChanged = true;
                 if (!nextPageToken.equals(""))
                     new RequestYoutubeAPI().execute();
+            }
+        });
+
+        top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy>0)
+                    top.show();
+                else
+                    top.hide();
             }
         });
 
@@ -215,7 +237,8 @@ public class HubFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        position = linearLayoutManager.getChildCount()+linearLayoutManager.findFirstVisibleItemPosition()-3;
+        position = linearLayoutManager.getChildCount()
+                +linearLayoutManager.findFirstVisibleItemPosition()-3;
         dataChanged = false;
     }
 

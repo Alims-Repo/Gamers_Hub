@@ -2,6 +2,7 @@ package com.alim.freefire.gamershub.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,9 +54,9 @@ public class HubAdapter extends RecyclerView.Adapter<HubAdapter.YoutubePostHolde
         holder.bind(dataSet.get(position), listener);
 
         //TODO: image will be downloaded from url
+
         Picasso.get().load(object.getThumbnail()).into(ImageThumb);
-        //Picasso.with(context).load(object.getThumbnail()).into(ImageThumb);
-        //Picasso.with(mContext).load(object2.getChannel_thumbnail()).into(ChannelThumb);
+
         if ((position >= getItemCount() - 1)) {
             listener.load();
         }

@@ -3,11 +3,11 @@ package com.alim.freefire.gamershub.DataBase;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class AppSettings {
+public class HubTempData {
 
     private Context context;
 
-    public AppSettings(Context Appcontext) {
+    public HubTempData(Context Appcontext) {
         context = Appcontext;
     }
 
@@ -25,4 +25,5 @@ public class AppSettings {
         SharedPreferences prefs = context.getSharedPreferences(DATA_NAME, 0);
         return prefs.getInt(THEME,0);
     }
+
 }
